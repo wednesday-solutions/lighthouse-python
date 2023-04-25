@@ -5,7 +5,7 @@ from collections import namedtuple
 from datetime import timedelta
 
 
-AuditResult = namedtuple('AuditResult', ['title', 'score', 'display'])
+AuditResult = namedtuple('AuditResult', ['title', 'score', 'display', 'description'])
 AuditCategoryResult = namedtuple('AuditCategoryResult', ['passed', 'failed'])
 
 BASE_TIMINGS = [
@@ -79,6 +79,7 @@ class LighthouseReport(object):
                     'title': v['title'],
                     'score': v['score'],
                     'display': v.get('displayValue'),
+                    'description': v.get('description'),
                 })
                 for k, v in all_audits.items()
                 if v.get('score', 0) == 1 and
@@ -90,9 +91,10 @@ class LighthouseReport(object):
                     'title': v['title'],
                     'score': v['score'],
                     'display': v.get('displayValue'),
+                    'description': v.get('description'),
                 })
                 for k, v in all_audits.items()
-                if v.get('score', 0) < 1 and
+                if v.get('score', 0) is not None and v.get('score', 0) < 1 and
                 v.get('scoreDisplayMode') not in sdm_to_reject
             ]
 
